@@ -1,0 +1,100 @@
+<div class="container-page">
+  @if (usuario(); as u) {
+    <div class="perfil-grid">
+      <div class="card perfil-card">
+        <div class="perfil-portada"></div>
+        <div class="perfil-info">
+          <div class="perfil-avatar" [style.background]="u.colorAvatar">{{ u.iniciales }}</div>
+          <h2>{{ u.nombre }}</h2>
+          <p class="text-muted">{{ u.programa }}</p>
+          <p class="etapa">● {{ u.etapa }}</p>
+
+          <div class="perfil-stats">
+            <div><strong>{{ u.totalTrueques }}</strong><span>Trueques</span></div>
+            <div><strong>{{ u.rating }}</strong><span>Rating</span></div>
+            <div><strong>{{ u.totalArticulos }}</strong><span>Artículos</span></div>
+          </div>
+
+          <button class="btn btn-outline btn-block" type="button" (click)="abrirEditar()">✏️ Editar perfil</button>
+
+          <ul class="perfil-datos">
+            <li>✉️ {{ u.correo }}</li>
+            <li>📱 {{ u.telefono }}</li>
+            <li>📍 {{ u.sede }}</li>
+            <li>🪪 {{ u.cedula }}</li>
+            <li>📅 Miembro desde {{ u.miembroDesde }}</li>
+          </ul>
+
+          <a routerLink="/pqr" class="btn btn-outline-danger btn-block">Radicar PQR</a>
+        </div>
+      </div>
+
+      <div class="resenas-col">
+        <div class="resenas-header">
+          <div>
+            <h2>Calificaciones recibidas</h2>
+            <p class="text-muted">Lo que dicen otros aprendices de ti</p>
+          </div>
+          <div class="card rating-grande">
+            <strong>{{ u.rating }}</strong>
+            <span class="estrellas-mini">★★★★★</span>
+            <span class="text-soft">{{ u.totalResenas }} reseñas</span>
+          </div>
+        </div>
+
+        <div class="lista-resenas">
+          @for (r of resenas; track r.nombre) {
+            <div class="resena-item">
+              <div class="resena-cabecera">
+                <span class="avatar-mini" [style.background]="r.color">{{ r.iniciales }}</span>
+                <div>
+                  <strong>{{ r.nombre }}</strong>
+                  <div class="estrellas">
+                    @for (e of estrellas(r.estrellas); track $index) {
+                      <span>{{ e }}</span>
+                    }
+                    <span class="text-soft fecha">{{ r.fecha }}</span>
+                  </div>
+                </div>
+              </div>
+              <p class="resena-comentario">{{ r.comentario }}</p>
+            </div>
+          }
+        </div>
+
+        <a routerLink="/inicio" class="btn btn-outline volver-btn">← Volver</a>
+      </div>
+    </div>
+  }
+</div>
+
+@if (modalEditarAbierto()) {
+  <app-modal
+    titulo="Editar perfil"
+    icono="✏️"
+    [ancho]="440"
+    (cerrar)="modalEditarAbierto.set(false)"
+  >
+    <div class="form-field">
+      <label for="nombreEditado">Nombre completo</label>
+      <input id="nombreEditado" type="text" [(ngModel)]="nombreEditado" name="nombreEditado" />
+    </div>
+    <div class="form-field">
+      <label for="programaEditado">Programa de formación</label>
+      <input id="programaEditado" type="text" [(ngModel)]="programaEditado" name="programaEditado" />
+    </div>
+    <div class="form-field">
+      <label for="telefonoEditado">Teléfono</label>
+      <input id="telefonoEditado" type="text" [(ngModel)]="telefonoEditado" name="telefonoEditado" />
+    </div>
+    <div class="form-field">
+      <label for="sedeEditada">Sede</label>
+      <input id="sedeEditada" type="text" [(ngModel)]="sedeEditada" name="sedeEditada" />
+    </div>
+
+    <div class="modal-acciones">
+      <button type="button" class="btn btn-outline" (click)="modalEditarAbierto.set(false)">Cancelar</button>
+      <button type="button" class="btn btn-primary" (click)="guardarPerfil()">💾 Guardar cambios</button>
+    </div>
+  </app-modal>
+}

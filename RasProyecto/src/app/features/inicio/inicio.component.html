@@ -1,0 +1,71 @@
+<div class="container-page">
+  <section class="banner-bienvenida">
+    <div class="banner-texto">
+      <h1>Bienvenido a RAS<br />Red de Apoyo SENA</h1>
+      <p>
+        Plataforma oficial del SENA para interconectar aprendices. Intercambia
+        uniformes, útiles y materiales académicos con tu comunidad.
+      </p>
+    </div>
+    <div class="banner-ilustracion" aria-hidden="true">
+      <svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="46" r="24" fill="#ffe3c4" />
+        <path d="M36 96c4-20 20-30 24-30s20 10 24 30v20H36z" fill="#3b6ea5" />
+        <circle cx="160" cy="50" r="24" fill="#ffcf9e" />
+        <path d="M136 100c4-20 20-30 24-30s20 10 24 30v20h-48z" fill="#2f9d5b" />
+        <rect x="86" y="86" width="48" height="40" rx="4" fill="#c98a4b" />
+        <rect x="86" y="86" width="48" height="10" fill="#a86f38" />
+        <line x1="110" y1="86" x2="110" y2="126" stroke="#a86f38" stroke-width="3" />
+      </svg>
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    @for (s of stats; track s.etiqueta) {
+      <app-stat-card [icono]="s.icono" [valor]="s.valor" [etiqueta]="s.etiqueta" class="card" />
+    }
+  </section>
+
+  <section>
+    <h2>Publicaciones recientes</h2>
+    <p class="text-muted subtitulo">Artículos disponibles en tu comunidad</p>
+
+    <div class="grid-publicaciones">
+      @for (pub of publicaciones(); track pub.id) {
+        <article class="card pub-card">
+          <div class="pub-imagen" [style.background]="pub.colorFondo">{{ pub.icono }}</div>
+          <div class="pub-body">
+            <h3>{{ pub.titulo }}</h3>
+            <div class="pub-meta">
+              <app-badge [estado]="pub.tipo" />
+              <span class="text-soft">{{ pub.sede }}</span>
+            </div>
+            <div class="pub-footer">
+              <span class="autor">
+                <span class="avatar-mini" [style.background]="pub.autorColor">{{ pub.autorIniciales }}</span>
+                {{ pub.autorNombre }}
+              </span>
+              <a routerLink="/mis-publicaciones" class="link-ver">Ver</a>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section>
+    <h2>¿Cómo funciona RAS?</h2>
+    <p class="text-muted subtitulo">Tres pasos para empezar a intercambiar con tu comunidad</p>
+
+    <div class="grid-pasos">
+      @for (paso of pasos; track paso.numero) {
+        <div class="card paso-card">
+          <span class="paso-numero">{{ paso.numero }}</span>
+          <span class="paso-icono">{{ paso.icono }}</span>
+          <h4>{{ paso.titulo }}</h4>
+          <p class="text-muted">{{ paso.texto }}</p>
+        </div>
+      }
+    </div>
+  </section>
+</div>

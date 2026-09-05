@@ -1,0 +1,99 @@
+<div class="mensajes-layout">
+  <aside class="lista-conversaciones" [class.oculta-movil]="mostrarChatMovil()">
+    <div class="lista-header">
+      <h2>Mensajes</h2>
+      <input type="text" placeholder="Buscar conversación..." class="buscador" />
+      <div class="tabs">
+        <button type="button" [class.activo]="filtro() === 'todos'" (click)="filtro.set('todos')">Todos</button>
+        <button type="button" [class.activo]="filtro() === 'noLeidos'" (click)="filtro.set('noLeidos')">No leídos</button>
+      </div>
+    </div>
+
+    <div class="conversaciones">
+      @for (c of conversacionesFiltradas(); track c.id) {
+        <button
+          type="button"
+          class="conversacion-item"
+          [class.activa]="c.id === conversacionActivaId()"
+          (click)="seleccionar(c.id)"
+        >
+          <span class="avatar-mini" [style.background]="c.contactoColor">{{ c.contactoIniciales }}</span>
+          <div class="conversacion-info">
+            <div class="conversacion-top">
+              <strong>{{ c.contactoNombre }}</strong>
+              <span class="text-soft">{{ c.hora }}</span>
+            </div>
+            <p class="text-muted ultimo-msj">{{ c.ultimoMensaje }}</p>
+            <span class="etiqueta-articulo">🏷️ {{ c.etiquetaArticulo }}</span>
+          </div>
+          @if (c.noLeidos > 0) { <span class="badge-no-leidos">{{ c.noLeidos }}</span> }
+        </button>
+      }
+    </div>
+  </aside>
+
+  <section class="panel-chat" [class.visible-movil]="mostrarChatMovil()">
+    @if (conversacionActiva(); as conv) {
+      <header class="chat-header">
+        <button type="button" class="btn-volver-movil" (click)="volverALista()">←</button>
+        <div class="chat-header-info" (click)="modalPerfilAbierto.set(true)">
+          <strong>{{ conv.contactoNombre }}</strong>
+          <span class="text-soft">
+            @if (conv.enLinea) { ● En línea } @else { {{ conv.ultimaConexion }} }
+            · {{ conv.contactoPrograma }} — {{ conv.contactoSede }}
+          </span>
+        </div>
+        <div class="chat-header-acciones">
+          <button type="button" class="btn btn-outline btn-sm" (click)="modalPerfilAbierto.set(true)">Ver perfil</button>
+          <button type="button" class="btn btn-primary btn-sm">Ver intercambio</button>
+        </div>
+      </header>
+
+      <div class="intercambio-relacionado">
+        Intercambio relacionado: <strong>{{ conv.intercambioArticulo }}</strong>
+        <span class="badge badge-blue">{{ conv.intercambioEstado }}</span>
+      </div>
+
+      <div class="chat-mensajes">
+        <span class="separador-fecha">Hoy</span>
+        @for (m of conv.mensajes; track m.id) {
+          <div class="mensaje-fila" [class.propio]="m.propio">
+            @if (!m.propio) { <span class="avatar-mini" [style.background]="conv.contactoColor">{{ conv.contactoIniciales }}</span> }
+            <div class="burbuja">
+              <p>{{ m.texto }}</p>
+              <span class="hora-msj">{{ m.hora }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <form class="chat-input" (ngSubmit)="enviar()">
+        <input type="text" placeholder="Escribe un mensaje..." [(ngModel)]="nuevoMensaje" name="nuevoMensaje" />
+        <button type="submit" class="btn-enviar" aria-label="Enviar">➤</button>
+      </form>
+    } @else {
+      <div class="chat-vacio">Selecciona una conversación para comenzar a chatear.</div>
+    }
+  </section>
+</div>
+
+<div class="container-page volver-wrap">
+  <a routerLink="/inicio" class="btn btn-outline">← Volver</a>
+</div>
+
+@if (modalPerfilAbierto() && conversacionActiva(); as conv) {
+  <app-modal titulo="Perfil del chat" icono="👤" [ancho]="360" (cerrar)="modalPerfilAbierto.set(false)">
+    <div class="perfil-chat-modal">
+      <span class="avatar-grande" [style.background]="conv.contactoColor">{{ conv.contactoIniciales }}</span>
+      <h3>{{ conv.contactoNombre }}</h3>
+      <p class="text-muted">{{ conv.contactoPrograma }}</p>
+      <p class="text-soft">{{ conv.contactoSede }}</p>
+      <p class="estado-conexion">{{ conv.enLinea ? '● En línea' : conv.ultimaConexion }}</p>
+      <div class="intercambio-mini">
+        <strong>Intercambio relacionado</strong>
+        <p>{{ conv.intercambioArticulo }}</p>
+        <span class="badge badge-blue">{{ conv.intercambioEstado }}</span>
+      </div>
+    </div>
+  </app-modal>
+}

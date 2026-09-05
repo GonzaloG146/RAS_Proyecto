@@ -1,0 +1,31 @@
+<div class="container-page">
+  <div class="header-flex">
+    <div>
+      <h1>Notificaciones</h1>
+      <p class="text-muted">Mantente al tanto de tu actividad en RAS</p>
+    </div>
+    @if (noLeidas() > 0) {
+      <button type="button" class="btn btn-outline" (click)="marcarTodasLeidas()">Marcar todas como leídas</button>
+    }
+  </div>
+
+  <div class="lista-notificaciones">
+    @for (n of notificaciones(); track n.id) {
+      <button type="button" class="card notificacion-item" [class.no-leida]="!n.leida" (click)="abrir(n)">
+        <span class="notif-icono">{{ n.icono }}</span>
+        <div class="notif-info">
+          <strong>{{ n.titulo }}</strong>
+          <p class="text-muted">{{ n.descripcion }}</p>
+          <span class="text-soft">{{ n.fecha }}</span>
+        </div>
+        @if (!n.leida) { <span class="punto-nueva"></span> }
+      </button>
+    }
+
+    @if (notificaciones().length === 0) {
+      <div class="card vacio">No tienes notificaciones por ahora.</div>
+    }
+  </div>
+
+  <a routerLink="/inicio" class="btn btn-outline volver-btn">← Volver</a>
+</div>

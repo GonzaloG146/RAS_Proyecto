@@ -1,0 +1,114 @@
+<div class="container-page">
+  <h1>Peticiones, Quejas y Reclamos</h1>
+  <p class="text-muted subtitulo">Radica o consulta el estado de tus solicitudes</p>
+
+  @if (confirmacionVisible()) {
+    <div class="card confirmacion-pqr">
+      <span class="confirmacion-icono">📮</span>
+      <div>
+        <strong>PQR radicada exitosamente</strong>
+        <p class="text-muted">Referencia {{ referenciaCreada() }} · Recibirás respuesta en máx. 24h.</p>
+      </div>
+    </div>
+  }
+
+  <div class="pqr-grid">
+    <div class="pqr-main">
+      <div class="tabs">
+        <button type="button" [class.activo]="pestana() === 'nueva'" (click)="pestana.set('nueva')">Nueva PQR</button>
+        <button type="button" [class.activo]="pestana() === 'mis'" (click)="pestana.set('mis')">Mis PQR</button>
+      </div>
+
+      @if (pestana() === 'nueva') {
+        <div class="card form-pqr">
+          <div class="form-field">
+            <label for="tipoNueva">Tipo de solicitud</label>
+            <select id="tipoNueva" [(ngModel)]="tipoNueva" name="tipoNueva">
+              <option value="Petición">Petición</option>
+              <option value="Queja">Queja</option>
+              <option value="Reclamo">Reclamo</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="asuntoNueva">Asunto</label>
+            <input id="asuntoNueva" type="text" [(ngModel)]="asuntoNueva" name="asuntoNueva"
+                   placeholder="Ej: El artículo recibido no coincide con la descripción" />
+          </div>
+          <div class="form-field">
+            <label for="relacionadoNueva">Relacionado con</label>
+            <input id="relacionadoNueva" type="text" [(ngModel)]="relacionadoNueva" name="relacionadoNueva"
+                   placeholder="Ej: Intercambio no completado" />
+          </div>
+          <div class="form-field">
+            <label for="descripcionNueva">Descripción detallada</label>
+            <textarea id="descripcionNueva" rows="5" [(ngModel)]="descripcionNueva" name="descripcionNueva"
+                      placeholder="Cuéntanos con detalle qué sucedió..."></textarea>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="radicar()">Radicar solicitud</button>
+        </div>
+      } @else {
+        <h3 class="titulo-lista">Mis PQR anteriores</h3>
+        <div class="lista-pqr">
+          @for (p of pqrs(); track p.id) {
+            <div class="card pqr-item">
+              <div class="pqr-icono">📄</div>
+              <div class="pqr-info">
+                <div class="pqr-titulo-row">
+                  <strong>{{ p.asunto }}</strong>
+                  <app-badge [estado]="p.tipo" />
+                  <app-badge [estado]="p.estado" />
+                </div>
+                <p class="text-soft">{{ p.relacionado }} · {{ p.fechaRadicada }}</p>
+                @if (p.estado === 'Resuelta' && p.fechaResuelta) {
+                  <p class="text-soft">✅ {{ p.fechaResuelta }}</p>
+                }
+              </div>
+              <div class="pqr-ref-col">
+                <span class="text-soft">Ref. {{ p.referencia }}</span>
+                @if (p.estado !== 'Resuelta') {
+                  <button type="button" class="btn btn-outline btn-sm">Ver detalle</button>
+                } @else {
+                  <button type="button" class="btn btn-outline btn-sm">📩 Ver respuesta</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <a routerLink="/inicio" class="btn btn-outline volver-btn">← Volver</a>
+    </div>
+
+    <aside class="pqr-sidebar">
+      <div class="card panel-info">
+        <h4>Información importante</h4>
+
+        <div class="info-bloque">
+          <strong>⏱️ Tiempos de respuesta</strong>
+          <div class="fila-info"><span>Petición</span><strong>5 días hábiles</strong></div>
+          <div class="fila-info"><span>Queja</span><strong>15 días hábiles</strong></div>
+          <div class="fila-info"><span>Reclamo</span><strong>15 días hábiles</strong></div>
+        </div>
+
+        <div class="info-bloque">
+          <strong>ℹ️ ¿Cuándo usar cada tipo?</strong>
+          <p><strong>Petición:</strong> Cuando necesitas información, un documento o que se realice una acción.</p>
+          <p><strong>Queja:</strong> Cuando estás inconforme con la atención o el comportamiento de otro usuario.</p>
+          <p><strong>Reclamo:</strong> Cuando un artículo no corresponde a su descripción o un trueque no se completó.</p>
+        </div>
+
+        <div class="info-bloque">
+          <strong>🔒 Tu privacidad</strong>
+          <p>Tu PQR es confidencial. Solo el equipo de mediación SENA y las partes involucradas tienen acceso a la información.</p>
+        </div>
+      </div>
+
+      <div class="mini-stats-grid">
+        <div class="card mini-stat"><strong>{{ stats().radicadas }}</strong><span>PQR radicadas</span></div>
+        <div class="card mini-stat"><strong>{{ stats().resueltas }}</strong><span>Resueltas</span></div>
+        <div class="card mini-stat"><strong>{{ stats().enProceso }}</strong><span>En proceso</span></div>
+        <div class="card mini-stat"><strong>{{ stats().satisfaccion }}</strong><span>Satisfacción</span></div>
+      </div>
+    </aside>
+  </div>
+</div>

@@ -1,0 +1,156 @@
+<div class="container-page">
+  <h1>Mis trueques</h1>
+  <p class="text-muted subtitulo">Seguimiento de todos tus trueques activos y pasados</p>
+
+  <div class="card stats-bar">
+    <div><strong>{{ stats().total }}</strong><span>Total</span></div>
+    <div><strong>{{ stats().enCurso }}</strong><span>En curso</span></div>
+    <div><strong>{{ stats().completados }}</strong><span>Completados</span></div>
+    <div><strong>{{ stats().cancelados }}</strong><span>Cancelados</span></div>
+    <div><strong>{{ stats().negociando }}</strong><span>Negociando</span></div>
+  </div>
+
+  <div class="tabs">
+    <button type="button" [class.activo]="filtro() === 'todos'" (click)="filtro.set('todos')">Todos ({{ stats().total }})</button>
+    <button type="button" [class.activo]="filtro() === 'enCurso'" (click)="filtro.set('enCurso')">En curso ({{ stats().enCurso }})</button>
+    <button type="button" [class.activo]="filtro() === 'negociando'" (click)="filtro.set('negociando')">Negociando ({{ stats().negociando }})</button>
+    <button type="button" [class.activo]="filtro() === 'completados'" (click)="filtro.set('completados')">Completados ({{ stats().completados }})</button>
+    <button type="button" [class.activo]="filtro() === 'cancelados'" (click)="filtro.set('cancelados')">Cancelados ({{ stats().cancelados }})</button>
+  </div>
+
+  <div class="lista-trueques">
+    @for (t of truequesFiltrados(); track t.id) {
+      <div class="card trueque-card">
+        <div class="trueque-top">
+          <div class="articulos-trueque">
+            <div class="articulo-col">
+              <span class="text-soft label-articulo">Tú ofreces</span>
+              <div class="articulo-info">
+                <span class="articulo-icono">{{ t.ofreces.icono }}</span>
+                <div>
+                  <strong>{{ t.ofreces.nombre }}</strong>
+                  <span class="text-soft d-block">{{ t.ofreces.categoria }}</span>
+                </div>
+              </div>
+            </div>
+            <span class="flecha">⇄</span>
+            <div class="articulo-col">
+              <span class="text-soft label-articulo">Recibes</span>
+              <div class="articulo-info">
+                <span class="articulo-icono">{{ t.recibes.icono }}</span>
+                <div>
+                  <strong>{{ t.recibes.nombre }}</strong>
+                  <span class="text-soft d-block">{{ t.recibes.categoria }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contraparte">
+            <strong>{{ t.contraparteNombre }}</strong>
+            <span class="text-soft d-block">{{ t.contraparteSede }}</span>
+            <span class="avatar-mini" [style.background]="t.contraparteColor">{{ t.contraparteIniciales }}</span>
+          </div>
+        </div>
+
+        @if (t.estado !== 'Cancelado') {
+          <div class="stepper">
+            @for (paso of pasos; track paso; let i = $index) {
+              <div class="paso" [class]="estadoPaso(t, i)">
+                <span class="paso-circulo">
+                  @if (estadoPaso(t, i) === 'hecho') { ✓ } @else { {{ i + 1 }} }
+                </span>
+                <span class="paso-label">{{ paso }}</span>
+              </div>
+              @if (i < pasos.length - 1) { <span class="paso-linea" [class.hecho]="estadoPaso(t, i) === 'hecho'"></span> }
+            }
+          </div>
+
+          @if (t.puntoEncuentro || t.fechaAcordada) {
+            <div class="acuerdo-info">
+              @if (t.puntoEncuentro) {
+                <div><strong>Punto de encuentro acordado</strong><span class="text-soft d-block">{{ t.puntoEncuentro }}</span></div>
+              }
+              @if (t.fechaAcordada) {
+                <div><strong>Fecha acordada</strong><span class="text-soft d-block">{{ t.fechaAcordada }}</span></div>
+              }
+            </div>
+          }
+        } @else {
+          <p class="motivo-cancelacion">{{ t.motivoCancelacion }}</p>
+        }
+
+        <div class="trueque-footer">
+          <span class="text-soft">{{ t.actualizado }} · <app-badge [estado]="t.estado" /></span>
+          <div class="acciones-footer">
+            <a routerLink="/mensajes" class="btn btn-outline btn-sm">💬 Chat</a>
+            @if (t.estado === 'En curso' && !t.evidenciaSubida) {
+              <button type="button" class="btn btn-outline btn-sm" (click)="abrirSubirEvidencia(t)">📎 Subir evidencia</button>
+            }
+            @if (t.estado === 'En curso' || t.estado === 'Negociando' || t.estado === 'Esperando respuesta') {
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="cancelar(t)">Cancelar</button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (truequesFiltrados().length === 0) {
+      <div class="card vacio">No hay trueques en esta categoría.</div>
+    }
+  </div>
+
+  <a routerLink="/inicio" class="btn btn-outline volver-btn">← Volver</a>
+</div>
+
+@if (modalEvidenciaAbierto() && truequeSeleccionado(); as t) {
+  <app-modal
+    titulo="Subir evidencia del trueque"
+    [subtitulo]="t.ofreces.nombre + ' ↔ ' + t.recibes.nombre"
+    icono="📎"
+    [ancho]="480"
+    (cerrar)="cerrarModalEvidencia()"
+  >
+    @if (vistaModalEvidencia() === 'form') {
+      <div class="info-caja">
+        <strong>ℹ️ ¿Qué necesitas subir?</strong>
+        <p>Sube fotos que demuestren que el intercambio se realizó: artículos juntos, punto de entrega, selfie, etc.</p>
+      </div>
+
+      <div class="dropzone">
+        <span class="dropzone-icono">📷</span>
+        <strong>Arrastra fotos aquí o haz clic para seleccionar</strong>
+        <span class="text-soft">JPG, PNG o HEIC · Máximo 5 fotos · 10 MB c/u</span>
+      </div>
+      <p class="text-soft contador-fotos">0/5 foto(s) seleccionada(s)</p>
+
+      <div class="form-field">
+        <label>Descripción de la evidencia (opcional)</label>
+        <textarea rows="2" [(ngModel)]="descripcionEvidencia" name="descripcionEvidencia"
+                  placeholder="Ej: Intercambio realizado el jueves 29 de mayo en la sede Kennedy, recepción principal..."></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>Tipo de evidencia</label>
+        <select [(ngModel)]="tipoEvidencia" name="tipoEvidencia">
+          <option>Foto de los artículos intercambiados</option>
+          <option>Foto del punto de encuentro</option>
+          <option>Selfie con la contraparte</option>
+        </select>
+      </div>
+
+      <div class="modal-acciones">
+        <button type="button" class="btn btn-outline" (click)="cerrarModalEvidencia()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="enviarEvidencia()">✅ Enviar evidencia</button>
+      </div>
+    } @else {
+      <div class="confirmacion-exito">
+        <span class="icono-exito">✅</span>
+        <h3>¡Evidencia enviada con éxito!</h3>
+        <p class="text-muted">Tu evidencia fue registrada y notificada a la contraparte.</p>
+        <p class="text-muted">El trueque avanzará al paso <strong>Evidencia ✓</strong> una vez que ambas partes la confirmen.</p>
+        <button type="button" class="btn btn-primary" (click)="cerrarModalEvidencia()">Cerrar</button>
+      </div>
+    }
+  </app-modal>
+}

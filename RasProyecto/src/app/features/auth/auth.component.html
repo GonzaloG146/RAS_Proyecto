@@ -1,0 +1,87 @@
+<div class="auth-layout">
+  <div class="auth-panel-izq">
+    <span class="marca">RAS Red de Apoyo SENA</span>
+    <span class="hero-tag">Plataforma solidaria SENA</span>
+    <h1>Intercambia y dona<br />con tu comunidad</h1>
+    <p>
+      Conecta con otros aprendices del SENA para intercambiar uniformes, libros y
+      materiales académicos.
+    </p>
+    <div class="stats-mini">
+      <div class="stat-mini"><strong>+1.2K</strong><span>Aprendices</span></div>
+      <div class="stat-mini"><strong>340</strong><span>Trueques</span></div>
+      <div class="stat-mini"><strong>12</strong><span>Sedes</span></div>
+    </div>
+  </div>
+
+  <div class="auth-panel-der">
+    <div class="auth-form-wrap">
+      <h2>Bienvenido</h2>
+      <p class="text-muted">Accede con tu cuenta institucional</p>
+
+      <div class="tabs">
+        <button
+          type="button"
+          class="tab"
+          [class.activo]="pestana() === 'login'"
+          (click)="cambiarPestana('login')"
+        >Iniciar sesión</button>
+        <button
+          type="button"
+          class="tab"
+          [class.activo]="pestana() === 'registro'"
+          (click)="cambiarPestana('registro')"
+        >Registrarse</button>
+      </div>
+
+      @if (error()) {
+        <div class="alerta-error">{{ error() }}</div>
+      }
+
+      @if (pestana() === 'login') {
+        <div class="credenciales-prueba">
+          <strong>🔑 Credenciales de prueba</strong>
+          <p>Usuario: <strong>jgarcia&#64;misena.edu.co</strong></p>
+          <p>Contraseña: <strong>Sena2025*</strong></p>
+        </div>
+
+        <form (ngSubmit)="enviarLogin()">
+          <div class="form-field">
+            <label for="correoLogin">Correo Mi SENA o personal</label>
+            <input id="correoLogin" type="email" name="correoLogin" [(ngModel)]="correoLogin" required />
+          </div>
+          <div class="form-field">
+            <label for="passwordLogin">Contraseña</label>
+            <input id="passwordLogin" type="password" name="passwordLogin" [(ngModel)]="passwordLogin" required />
+          </div>
+          <a href="javascript:void(0)" class="olvido">¿Olvidaste tu contraseña?</a>
+          <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+        </form>
+      } @else {
+        <form (ngSubmit)="enviarRegistro()">
+          <div class="form-field">
+            <label for="nombreRegistro">Nombre completo</label>
+            <input id="nombreRegistro" type="text" name="nombreRegistro" [(ngModel)]="nombreRegistro"
+                   placeholder="Johan Gonzalo García W." required />
+          </div>
+          <div class="form-field">
+            <label for="correoRegistro">Correo Mi SENA o personal</label>
+            <input id="correoRegistro" type="email" name="correoRegistro" [(ngModel)]="correoRegistro"
+                   placeholder="usuario@misena.edu.co" required />
+          </div>
+          <div class="form-field">
+            <label for="programaRegistro">Programa de formación</label>
+            <input id="programaRegistro" type="text" name="programaRegistro" [(ngModel)]="programaRegistro"
+                   placeholder="Análisis y Desarrollo de Software" />
+          </div>
+          <div class="form-field">
+            <label for="passwordRegistro">Contraseña</label>
+            <input id="passwordRegistro" type="password" name="passwordRegistro" [(ngModel)]="passwordRegistro"
+                   placeholder="Mínimo 8 caracteres" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+        </form>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+
+@Component({
+  selector: 'app-modal',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="modal-overlay" (click)="onOverlayClick($event)">
+      <div class="modal-box" [style.max-width.px]="ancho" role="dialog" aria-modal="true">
+        <header class="modal-header">
+          <h2>@if (icono) {<span class="modal-icon">{{ icono }}</span>} {{ titulo }}</h2>
+          <button class="modal-close" type="button" (click)="cerrar.emit()" aria-label="Cerrar">✕</button>
+        </header>
+        @if (subtitulo) {
+          <p class="modal-subtitulo">{{ subtitulo }}</p>
+        }
+        <div class="modal-content">
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [
+    `
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(13, 53, 30, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 16px;
+        animation: ras-fade-in 0.15s ease;
+      }
+      .modal-box {
+        background: var(--ras-white);
+        width: 100%;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-modal);
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: ras-modal-in 0.18s ease;
+      }
+      .modal-header {
+        background: linear-gradient(135deg, var(--ras-green-700), var(--ras-green-500));
+        color: var(--ras-white);
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        position: sticky;
+        top: 0;
+      }
+      .modal-header h2 {
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ras-white);
+      }
+      .modal-icon { font-size: 18px; }
+      .modal-close {
+        background: rgba(255, 255, 255, 0.18);
+        border: none;
+        color: var(--ras-white);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-close:hover { background: rgba(255, 255, 255, 0.3); }
+      .modal-subtitulo {
+        padding: 10px 22px 0;
+        font-size: 13px;
+        color: var(--ras-text-muted);
+      }
+      .modal-content { padding: 22px; }
+
+      @media (max-width: 560px) {
+        .modal-content, .modal-header { padding-left: 16px; padding-right: 16px; }
+      }
+    `
+  ]
+})
+export class ModalComponent {
+  @Input() titulo = '';
+  @Input() subtitulo = '';
+  @Input() icono = '';
+  @Input() ancho = 480;
+  @Input() cerrarAlClickFuera = true;
+  @Output() cerrar = new EventEmitter<void>();
+
+  onOverlayClick(evento: MouseEvent): void {
+    if (this.cerrarAlClickFuera && evento.target === evento.currentTarget) {
+      this.cerrar.emit();
+    }
+  }
+}
