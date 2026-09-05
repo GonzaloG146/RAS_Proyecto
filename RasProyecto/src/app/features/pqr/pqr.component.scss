@@ -68,3 +68,26 @@ h1 { font-size: 22px; }
   .pqr-item { flex-direction: column; }
   .pqr-ref-col { align-items: flex-start; flex-direction: row; width: 100%; justify-content: space-between; }
 }
+
+/* ---- Modal detalle PQR ---- */
+.detalle-header { margin-bottom: 14px; }
+.detalle-titulo-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.detalle-descripcion { font-size: 13.5px; color: var(--ras-text-muted); line-height: 1.6; margin-bottom: 16px; }
+.respuesta-caja {
+  background: var(--ras-green-50);
+  border: 1px solid var(--ras-green-100);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+.respuesta-caja strong { color: var(--ras-green-700); display: block; margin-bottom: 6px; }
+.titulo-timeline { font-size: 14px; margin-bottom: 10px; }
+.timeline { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+.timeline-item { display: flex; gap: 10px; font-size: 13px; }
+.timeline-punto {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--ras-green-500);
+  margin-top: 5px; flex-shrink: 0;
+}
+.modal-acciones { display: flex; justify-content: flex-end; margin-top: 6px; }

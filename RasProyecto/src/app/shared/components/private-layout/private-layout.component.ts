@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 
 @Component({
   selector: 'app-private-layout',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, SidebarComponent],
+  imports: [RouterOutlet, NavbarComponent, SidebarComponent, BottomNavComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="layout">
@@ -22,6 +23,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
           <router-outlet></router-outlet>
         </main>
       </div>
+      <app-bottom-nav></app-bottom-nav>
     </div>
   `,
   styles: [
@@ -44,6 +46,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
           background: rgba(13, 53, 30, 0.35);
           z-index: 890;
         }
+        .contenido { padding-bottom: 62px; }
       }
     `
   ]

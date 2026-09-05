@@ -43,7 +43,7 @@
         </div>
 
         <div class="lista-resenas">
-          @for (r of resenas; track r.nombre) {
+          @for (r of resenas(); track $index) {
             <div class="resena-item">
               <div class="resena-cabecera">
                 <span class="avatar-mini" [style.background]="r.color">{{ r.iniciales }}</span>

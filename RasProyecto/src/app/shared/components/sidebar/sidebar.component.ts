@@ -109,6 +109,7 @@ export class SidebarComponent {
 
   readonly items: ItemMenu[] = [
     { ruta: '/inicio', etiqueta: 'Inicio', icono: '🏠' },
+    { ruta: '/explorar', etiqueta: 'Explorar', icono: '🔎' },
     { ruta: '/mi-perfil', etiqueta: 'Mi perfil', icono: '👤' },
     { ruta: '/mis-trueques', etiqueta: 'Mis trueques', icono: '🔄' },
     { ruta: '/mis-publicaciones', etiqueta: 'Mis publicaciones', icono: '📋' },

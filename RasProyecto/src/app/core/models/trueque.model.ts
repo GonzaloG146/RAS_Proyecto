@@ -27,4 +27,5 @@ export interface Trueque {
   fechaCierre?: string;
   motivoCancelacion?: string;
   evidenciaSubida?: boolean;
+  calificado?: boolean;
 }

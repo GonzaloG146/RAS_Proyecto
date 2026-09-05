@@ -100,3 +100,11 @@
   .auth-panel-izq { padding: 32px 24px; min-height: 320px; justify-content: center; }
   .auth-panel-izq h1 { font-size: 26px; }
 }
+
+.recuperar-intro { margin-bottom: 16px; font-size: 13.5px; line-height: 1.5; }
+.modal-acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+.confirmacion-exito { text-align: center; padding: 10px 0; }
+.icono-exito { font-size: 40px; display: block; margin-bottom: 10px; }
+.confirmacion-exito h3 { margin-bottom: 8px; }
+.confirmacion-exito p { margin-bottom: 6px; }
+.confirmacion-exito .btn { margin-top: 10px; }

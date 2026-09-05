@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { AuthService } from '../../core/services/auth.service';
-import { RESENAS_MOCK } from '../../core/mock-data';
+import { ResenasService } from '../../core/services/resenas.service';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -15,9 +15,10 @@ import { RESENAS_MOCK } from '../../core/mock-data';
 })
 export class MiPerfilComponent {
   private readonly auth = inject(AuthService);
+  private readonly resenasService = inject(ResenasService);
 
   readonly usuario = this.auth.usuario;
-  readonly resenas = RESENAS_MOCK;
+  readonly resenas = this.resenasService.resenas;
 
   readonly modalEditarAbierto = signal(false);
 

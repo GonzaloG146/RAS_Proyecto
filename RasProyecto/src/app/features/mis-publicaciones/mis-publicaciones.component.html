@@ -8,7 +8,7 @@
   </div>
 
   @if (confirmacionVisible()) {
-    <div class="confirmacion-toast">📦 Publicación creada</div>
+    <div class="confirmacion-toast">📦 {{ modoEdicion() ? 'Publicación actualizada' : 'Publicación creada' }}</div>
   }
 
   <div class="card stats-bar">
@@ -61,11 +61,11 @@
 
           @if (pub.estado === 'Cerrada') {
             <span class="text-soft">Finalizada</span>
-            <button type="button" class="btn-link">Editar</button>
+            <button type="button" class="btn-link" (click)="abrirEditar(pub)">Editar</button>
           } @else {
-            <button type="button" class="btn-link">Editar</button>
+            <button type="button" class="btn-link" (click)="abrirEditar(pub)">Editar</button>
             @if (pub.estado === 'Activa') {
-              <button type="button" class="btn-link">Pausar</button>
+              <button type="button" class="btn-link" (click)="pausar(pub)">Pausar</button>
             } @else if (pub.estado === 'Pausada') {
               <button type="button" class="btn-link reactivar" (click)="reactivar(pub)">Reactivar</button>
             }
@@ -83,7 +83,7 @@
 </div>
 
 @if (modalNuevaAbierto()) {
-  <app-modal titulo="Nueva publicación" icono="📦" [ancho]="480" (cerrar)="modalNuevaAbierto.set(false)">
+  <app-modal [titulo]="modoEdicion() ? 'Editar publicación' : 'Nueva publicación'" icono="📦" [ancho]="480" (cerrar)="modalNuevaAbierto.set(false)">
     <div class="form-field">
       <label for="tituloNueva">Título del artículo</label>
       <input id="tituloNueva" type="text" [(ngModel)]="tituloNueva" name="tituloNueva" placeholder="Ej: Uniforme SENA talla M" />
@@ -124,7 +124,7 @@
     </div>
     <div class="modal-acciones">
       <button type="button" class="btn btn-outline" (click)="modalNuevaAbierto.set(false)">Cancelar</button>
-      <button type="button" class="btn btn-primary" (click)="publicar()">Publicar artículo</button>
+      <button type="button" class="btn btn-primary" (click)="publicar()">{{ modoEdicion() ? 'Guardar cambios' : 'Publicar artículo' }}</button>
     </div>
   </app-modal>
 }
@@ -140,7 +140,11 @@
             <strong>{{ p.nombre }}</strong>
             <span class="text-muted">Ofrece: {{ p.ofrece }}</span>
           </div>
-          <a routerLink="/mensajes" class="btn btn-outline btn-sm">💬 Chat</a>
+          <div class="propuesta-acciones">
+            <a routerLink="/mensajes" class="btn btn-outline btn-sm">💬 Chat</a>
+            <button type="button" class="btn btn-primary btn-sm" (click)="aceptarPropuesta(pub, p)">✓ Aceptar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" (click)="rechazarPropuesta(pub, p)">✕ Rechazar</button>
+          </div>
         </div>
       }
     </div>

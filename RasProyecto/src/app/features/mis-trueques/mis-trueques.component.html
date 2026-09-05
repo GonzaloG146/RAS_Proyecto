@@ -90,6 +90,11 @@
             @if (t.estado === 'En curso' || t.estado === 'Negociando' || t.estado === 'Esperando respuesta') {
               <button type="button" class="btn btn-outline-danger btn-sm" (click)="cancelar(t)">Cancelar</button>
             }
+            @if (t.estado === 'Completado' && !t.calificado) {
+              <button type="button" class="btn btn-primary btn-sm" (click)="abrirCalificar(t)">⭐ Calificar</button>
+            } @else if (t.estado === 'Completado' && t.calificado) {
+              <span class="text-soft calificado-tag">✓ Ya calificado</span>
+            }
           </div>
         </div>
       </div>
@@ -117,12 +122,12 @@
         <p>Sube fotos que demuestren que el intercambio se realizó: artículos juntos, punto de entrega, selfie, etc.</p>
       </div>
 
-      <div class="dropzone">
+      <div class="dropzone" (click)="seleccionarFotos()" role="button" tabindex="0">
         <span class="dropzone-icono">📷</span>
         <strong>Arrastra fotos aquí o haz clic para seleccionar</strong>
         <span class="text-soft">JPG, PNG o HEIC · Máximo 5 fotos · 10 MB c/u</span>
       </div>
-      <p class="text-soft contador-fotos">0/5 foto(s) seleccionada(s)</p>
+      <p class="text-soft contador-fotos">{{ fotosSeleccionadas() }}/5 foto(s) seleccionada(s)</p>
 
       <div class="form-field">
         <label>Descripción de la evidencia (opcional)</label>
@@ -150,6 +155,45 @@
         <p class="text-muted">Tu evidencia fue registrada y notificada a la contraparte.</p>
         <p class="text-muted">El trueque avanzará al paso <strong>Evidencia ✓</strong> una vez que ambas partes la confirmen.</p>
         <button type="button" class="btn btn-primary" (click)="cerrarModalEvidencia()">Cerrar</button>
+      </div>
+    }
+  </app-modal>
+}
+
+@if (modalCalificarAbierto() && truequeACalificar; as t) {
+  <app-modal
+    titulo="Calificar usuario"
+    [subtitulo]="'¿Cómo fue tu experiencia con ' + t.contraparteNombre + '?'"
+    icono="⭐"
+    [ancho]="420"
+    (cerrar)="cerrarModalCalificar()"
+  >
+    @if (vistaModalCalificar() === 'form') {
+      <div class="estrellas-selector">
+        @for (n of [1, 2, 3, 4, 5]; track n) {
+          <button
+            type="button"
+            class="estrella-btn"
+            [class.activa]="n <= estrellasCalificacion"
+            (click)="elegirEstrellas(n)"
+          >{{ n <= estrellasCalificacion ? '★' : '☆' }}</button>
+        }
+      </div>
+      <div class="form-field">
+        <label for="comentarioCalificacion">Comentario (opcional)</label>
+        <textarea id="comentarioCalificacion" rows="3" [(ngModel)]="comentarioCalificacion" name="comentarioCalificacion"
+                  placeholder="Cuéntanos cómo fue el intercambio y el cumplimiento del otro aprendiz..."></textarea>
+      </div>
+      <div class="modal-acciones">
+        <button type="button" class="btn btn-outline" (click)="cerrarModalCalificar()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="enviarCalificacion()">Enviar evaluación</button>
+      </div>
+    } @else {
+      <div class="confirmacion-exito">
+        <span class="icono-exito">👍</span>
+        <h3>Tu evaluación ha sido enviada</h3>
+        <p class="text-muted">Tu evaluación ayuda a mejorar la comunidad RAS.</p>
+        <button type="button" class="btn btn-primary" (click)="cerrarModalCalificar()">Aceptar</button>
       </div>
     }
   </app-modal>

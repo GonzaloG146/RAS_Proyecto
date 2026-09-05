@@ -23,6 +23,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/inicio/inicio.component').then((m) => m.InicioComponent)
       },
       {
+        path: 'explorar',
+        loadComponent: () => import('./features/explorar/explorar.component').then((m) => m.ExplorarComponent)
+      },
+      {
         path: 'mi-perfil',
         loadComponent: () => import('./features/mi-perfil/mi-perfil.component').then((m) => m.MiPerfilComponent)
       },

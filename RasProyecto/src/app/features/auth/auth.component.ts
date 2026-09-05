@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
 
 type Pestana = 'login' | 'registro';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'
@@ -29,6 +30,32 @@ export class AuthComponent {
   correoRegistro = '';
   programaRegistro = '';
   passwordRegistro = '';
+
+  // ---- Recuperar contraseña (RF03) ----
+  readonly modalRecuperarAbierto = signal(false);
+  readonly vistaRecuperar = signal<'form' | 'enviado'>('form');
+  correoRecuperar = '';
+  errorRecuperar = '';
+
+  abrirRecuperar(): void {
+    this.correoRecuperar = this.correoLogin || '';
+    this.errorRecuperar = '';
+    this.vistaRecuperar.set('form');
+    this.modalRecuperarAbierto.set(true);
+  }
+
+  cerrarRecuperar(): void {
+    this.modalRecuperarAbierto.set(false);
+  }
+
+  enviarEnlaceRecuperacion(): void {
+    if (!this.correoRecuperar.trim() || !this.correoRecuperar.includes('@')) {
+      this.errorRecuperar = 'Ingresa un correo electrónico válido.';
+      return;
+    }
+    this.errorRecuperar = '';
+    this.vistaRecuperar.set('enviado');
+  }
 
   cambiarPestana(p: Pestana): void {
     this.pestana.set(p);

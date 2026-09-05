@@ -66,9 +66,9 @@
               <div class="pqr-ref-col">
                 <span class="text-soft">Ref. {{ p.referencia }}</span>
                 @if (p.estado !== 'Resuelta') {
-                  <button type="button" class="btn btn-outline btn-sm">Ver detalle</button>
+                  <button type="button" class="btn btn-outline btn-sm" (click)="verDetalle(p)">Ver detalle</button>
                 } @else {
-                  <button type="button" class="btn btn-outline btn-sm">📩 Ver respuesta</button>
+                  <button type="button" class="btn btn-outline btn-sm" (click)="verDetalle(p)">📩 Ver respuesta</button>
                 }
               </div>
             </div>
@@ -112,3 +112,42 @@
     </aside>
   </div>
 </div>
+
+@if (pqrSeleccionada(); as p) {
+  <app-modal titulo="Detalle de la solicitud" icono="📄" [ancho]="480" (cerrar)="cerrarDetalle()">
+    <div class="detalle-header">
+      <div class="detalle-titulo-row">
+        <strong>{{ p.asunto }}</strong>
+        <app-badge [estado]="p.tipo" />
+        <app-badge [estado]="p.estado" />
+      </div>
+      <span class="text-soft">Ref. {{ p.referencia }} · {{ p.relacionado }}</span>
+    </div>
+
+    <p class="detalle-descripcion">{{ p.descripcion }}</p>
+
+    @if (p.respuesta) {
+      <div class="respuesta-caja">
+        <strong>📩 Respuesta del equipo de mediación</strong>
+        <p>{{ p.respuesta }}</p>
+      </div>
+    }
+
+    <h4 class="titulo-timeline">Seguimiento</h4>
+    <div class="timeline">
+      @for (evento of p.timeline; track $index) {
+        <div class="timeline-item">
+          <span class="timeline-punto"></span>
+          <div>
+            <strong>{{ evento.texto }}</strong>
+            <span class="text-soft d-block">{{ evento.fecha }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="modal-acciones">
+      <button type="button" class="btn btn-primary" (click)="cerrarDetalle()">Cerrar</button>
+    </div>
+  </app-modal>
+}

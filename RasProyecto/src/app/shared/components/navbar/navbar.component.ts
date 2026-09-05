@@ -30,7 +30,7 @@ import { NotificacionesService } from '../../../core/services/notificaciones.ser
             <div class="dropdown">
               <a routerLink="/mi-perfil" (click)="menuAbierto.set(false)">👤 Mi perfil</a>
               <a routerLink="/notificaciones" (click)="menuAbierto.set(false)">🔔 Notificaciones</a>
-              <a href="javascript:void(0)" (click)="menuAbierto.set(false)">❓ Ayuda / Soporte</a>
+              <a routerLink="/pqr" (click)="menuAbierto.set(false)">❓ Ayuda / Soporte</a>
               <button type="button" class="dropdown-salir" (click)="salir()">🚪 Cerrar sesión</button>
             </div>
           }

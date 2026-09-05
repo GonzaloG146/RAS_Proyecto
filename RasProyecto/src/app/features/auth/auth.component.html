@@ -54,7 +54,7 @@
             <label for="passwordLogin">Contraseña</label>
             <input id="passwordLogin" type="password" name="passwordLogin" [(ngModel)]="passwordLogin" required />
           </div>
-          <a href="javascript:void(0)" class="olvido">¿Olvidaste tu contraseña?</a>
+          <a href="javascript:void(0)" class="olvido" (click)="abrirRecuperar()">¿Olvidaste tu contraseña?</a>
           <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
         </form>
       } @else {
@@ -85,3 +85,35 @@
     </div>
   </div>
 </div>
+
+@if (modalRecuperarAbierto()) {
+  <app-modal titulo="Recuperar contraseña" icono="🔑" [ancho]="420" (cerrar)="cerrarRecuperar()">
+    @if (vistaRecuperar() === 'form') {
+      <p class="text-muted recuperar-intro">
+        Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+      </p>
+      @if (errorRecuperar) {
+        <div class="alerta-error">{{ errorRecuperar }}</div>
+      }
+      <div class="form-field">
+        <label for="correoRecuperar">Correo electrónico</label>
+        <input id="correoRecuperar" type="email" name="correoRecuperar" [(ngModel)]="correoRecuperar"
+               placeholder="usuario@sena.edu.co" />
+      </div>
+      <div class="modal-acciones">
+        <button type="button" class="btn btn-outline" (click)="cerrarRecuperar()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="enviarEnlaceRecuperacion()">Enviar enlace</button>
+      </div>
+    } @else {
+      <div class="confirmacion-exito">
+        <span class="icono-exito">✉️</span>
+        <h3>¡Enlace enviado!</h3>
+        <p class="text-muted">
+          Hemos enviado un enlace a <strong>{{ correoRecuperar }}</strong> para que puedas restablecer tu contraseña.
+        </p>
+        <p class="text-soft">Revisa tu bandeja de entrada y carpeta de spam.</p>
+        <button type="button" class="btn btn-primary" (click)="cerrarRecuperar()">Volver a inicio de sesión</button>
+      </div>
+    }
+  </app-modal>
+}

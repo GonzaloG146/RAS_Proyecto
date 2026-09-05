@@ -1,0 +1,142 @@
+<div class="container-page">
+  <h1>Explorar artículos</h1>
+  <p class="text-muted subtitulo">Busca y filtra artículos disponibles en toda la comunidad RAS</p>
+
+  <div class="card panel-filtros">
+    <div class="form-field buscador-field">
+      <label for="busqueda">Buscar artículo</label>
+      <input
+        id="busqueda"
+        type="text"
+        placeholder="Ej: uniforme, libro, calculadora..."
+        [ngModel]="busqueda()"
+        (ngModelChange)="busqueda.set($event)"
+      />
+    </div>
+
+    <div class="filtros-fila">
+      <div class="form-field">
+        <label for="filtroCategoria">Categoría</label>
+        <select id="filtroCategoria" [ngModel]="filtroCategoria()" (ngModelChange)="filtroCategoria.set($event)">
+          @for (c of categorias; track c) { <option [value]="c">{{ c }}</option> }
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="filtroSede">Sede</label>
+        <select id="filtroSede" [ngModel]="filtroSede()" (ngModelChange)="filtroSede.set($event)">
+          @for (s of sedes; track s) { <option [value]="s">{{ s }}</option> }
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="filtroTipo">Tipo</label>
+        <select id="filtroTipo" [ngModel]="filtroTipo()" (ngModelChange)="filtroTipo.set($event)">
+          <option value="todos">Todos</option>
+          <option value="Trueque">Trueque</option>
+          <option value="Donación">Donación</option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-outline btn-limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
+    </div>
+  </div>
+
+  <p class="text-soft contador-resultados">Resultados ({{ resultados().length }})</p>
+
+  <div class="grid-publicaciones">
+    @for (pub of resultados(); track pub.id) {
+      <article class="card pub-card" (click)="abrirDetalle(pub)">
+        <div class="pub-imagen" [style.background]="pub.colorFondo">{{ pub.icono }}</div>
+        <div class="pub-body">
+          <h3>{{ pub.titulo }}</h3>
+          <div class="pub-meta">
+            <app-badge [estado]="pub.tipo" />
+            <span class="text-soft">{{ pub.sede }}</span>
+          </div>
+          <div class="pub-footer">
+            <span class="autor">
+              <span class="avatar-mini" [style.background]="pub.autorColor">{{ pub.autorIniciales }}</span>
+              {{ pub.autorNombre }}
+            </span>
+            <span class="link-ver">Ver</span>
+          </div>
+        </div>
+      </article>
+    }
+
+    @if (resultados().length === 0) {
+      <div class="card vacio">No se encontraron artículos con esos filtros.</div>
+    }
+  </div>
+
+  <a routerLink="/inicio" class="btn btn-outline volver-btn">← Volver</a>
+</div>
+
+@if (publicacionSeleccionada(); as pub) {
+  <app-modal
+    [titulo]="pub.titulo"
+    [icono]="pub.icono"
+    [ancho]="480"
+    (cerrar)="cerrarModal()"
+  >
+    @if (vistaModal() === 'detalle') {
+      <div class="detalle-meta">
+        <app-badge [estado]="pub.tipo" />
+        <app-badge [estado]="pub.estado" [conPunto]="true" />
+        <span class="text-soft">{{ pub.sede }} · {{ pub.categoria }}</span>
+      </div>
+      <p class="detalle-descripcion">{{ pub.descripcion }}</p>
+      <div class="detalle-autor">
+        <span class="avatar-mini" [style.background]="pub.autorColor">{{ pub.autorIniciales }}</span>
+        <div>
+          <strong>{{ pub.autorNombre }}</strong>
+          <span class="text-soft d-block">{{ pub.publicadaHace }} · {{ pub.vistas }} vistas</span>
+        </div>
+      </div>
+
+      @if (esPropia(pub)) {
+        <div class="info-caja">
+          <strong>ℹ️ Esta es tu publicación</strong>
+          <p>Gestiona sus propuestas desde "Mis publicaciones".</p>
+        </div>
+        <div class="modal-acciones">
+          <a routerLink="/mis-publicaciones" class="btn btn-primary" (click)="cerrarModal()">Ir a mis publicaciones</a>
+        </div>
+      } @else if (misPublicacionesActivas.length === 0) {
+        <div class="info-caja">
+          <strong>⚠️ Aún no tienes publicaciones activas</strong>
+          <p>Publica un artículo para poder proponer un trueque a cambio.</p>
+        </div>
+        <div class="modal-acciones">
+          <a routerLink="/mis-publicaciones" class="btn btn-primary" (click)="cerrarModal()">Crear publicación</a>
+        </div>
+      } @else {
+        <h4 class="titulo-propuesta">🤝 Proponer trueque</h4>
+        <div class="form-field">
+          <label for="ofrezcoTitulo">¿Qué ofreces a cambio?</label>
+          <select id="ofrezcoTitulo" [(ngModel)]="ofrezcoTitulo" name="ofrezcoTitulo">
+            @for (mp of misPublicacionesActivas; track mp.id) {
+              <option [value]="mp.titulo">{{ mp.titulo }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="mensajePropuesta">Mensaje inicial</label>
+          <textarea id="mensajePropuesta" rows="3" [(ngModel)]="mensajePropuesta" name="mensajePropuesta"></textarea>
+        </div>
+        <div class="modal-acciones">
+          <button type="button" class="btn btn-outline" (click)="cerrarModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="enviarPropuesta()">Enviar propuesta</button>
+        </div>
+      }
+    } @else {
+      <div class="confirmacion-exito">
+        <span class="icono-exito">✅</span>
+        <h3>¡Propuesta enviada!</h3>
+        <p class="text-muted">Se creó un chat y un nuevo trueque en negociación con {{ pub.autorNombre }}.</p>
+        <div class="modal-acciones acciones-centradas">
+          <button type="button" class="btn btn-outline" (click)="irAMensajes()">💬 Ver chat</button>
+          <button type="button" class="btn btn-primary" (click)="irAMisTrueques()">Ver mis trueques</button>
+        </div>
+      </div>
+    }
+  </app-modal>
+}

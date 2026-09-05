@@ -77,6 +77,43 @@ export class PublicacionesService {
     this.actualizarEstado(id, 'Activa');
   }
 
+  editar(
+    id: string,
+    cambios: Partial<Pick<Publicacion, 'titulo' | 'descripcion' | 'tipo' | 'categoria' | 'sede'>>
+  ): void {
+    this._misPublicaciones.update((lista) =>
+      lista.map((p) => (p.id === id ? { ...p, ...cambios } : p))
+    );
+  }
+
+  /** Elimina la propuesta aceptada y cierra la publicación (RF06). */
+  aceptarPropuesta(publicacionId: string, propuestaId: string): void {
+    this._misPublicaciones.update((lista) =>
+      lista.map((p) =>
+        p.id === publicacionId
+          ? { ...p, estado: 'Cerrada', progreso: 100, propuestas: p.propuestas.filter((pr) => pr.id !== propuestaId) }
+          : p
+      )
+    );
+  }
+
+  rechazarPropuesta(publicacionId: string, propuestaId: string): void {
+    this._misPublicaciones.update((lista) =>
+      lista.map((p) =>
+        p.id === publicacionId
+          ? { ...p, propuestas: p.propuestas.filter((pr) => pr.id !== propuestaId) }
+          : p
+      )
+    );
+  }
+
+  /** Agrega una propuesta recibida a una publicación de la comunidad (RF06, desde Explorar). */
+  agregarPropuestaComunidad(publicacionId: string, propuesta: PropuestaRecibida): void {
+    this._publicacionesComunidad.update((lista) =>
+      lista.map((p) => (p.id === publicacionId ? { ...p, propuestas: [...p.propuestas, propuesta] } : p))
+    );
+  }
+
   private actualizarEstado(id: string, estado: Publicacion['estado']): void {
     this._misPublicaciones.update((lista) =>
       lista.map((p) => (p.id === id ? { ...p, estado } : p))

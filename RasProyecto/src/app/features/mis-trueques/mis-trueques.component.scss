@@ -91,10 +91,26 @@ h1 { font-size: 22px; }
   align-items: center;
   gap: 6px;
   margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
+.dropzone:hover { border-color: var(--ras-green-500); background: var(--ras-green-50); }
 .dropzone-icono { font-size: 26px; }
 .dropzone strong { font-size: 14px; }
 .contador-fotos { margin-bottom: 16px; font-size: 12.5px; }
+
+.calificado-tag { font-size: 12.5px; padding: 0 4px; }
+
+.estrellas-selector { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+.estrella-btn {
+  background: none;
+  border: none;
+  font-size: 34px;
+  line-height: 1;
+  color: #f5b942;
+  padding: 0;
+}
+.estrella-btn:not(.activa) { color: var(--ras-border); }
 
 .modal-acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
 

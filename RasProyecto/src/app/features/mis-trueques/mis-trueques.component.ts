@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { BadgeComponent } from '../../shared/components/badge/badge.component';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { TruequesService } from '../../core/services/trueques.service';
+import { ResenasService } from '../../core/services/resenas.service';
 import { Trueque } from '../../core/models/trueque.model';
 
 type FiltroTrueque = 'todos' | 'enCurso' | 'negociando' | 'completados' | 'cancelados';
@@ -20,6 +21,7 @@ const PASOS = ['Propuesta enviada', 'Aceptada', 'Punto de encuentro', 'Evidencia
 })
 export class MisTruequesComponent {
   private readonly truequesService = inject(TruequesService);
+  private readonly resenasService = inject(ResenasService);
 
   readonly pasos = PASOS;
   readonly stats = this.truequesService.stats;
@@ -40,6 +42,7 @@ export class MisTruequesComponent {
   readonly modalEvidenciaAbierto = signal(false);
   readonly vistaModalEvidencia = signal<'form' | 'exito'>('form');
   readonly truequeSeleccionado = signal<Trueque | null>(null);
+  readonly fotosSeleccionadas = signal(0);
   descripcionEvidencia = '';
   tipoEvidencia = 'Foto de los artículos intercambiados';
 
@@ -47,8 +50,13 @@ export class MisTruequesComponent {
     this.truequeSeleccionado.set(t);
     this.descripcionEvidencia = '';
     this.tipoEvidencia = 'Foto de los artículos intercambiados';
+    this.fotosSeleccionadas.set(0);
     this.vistaModalEvidencia.set('form');
     this.modalEvidenciaAbierto.set(true);
+  }
+
+  seleccionarFotos(): void {
+    this.fotosSeleccionadas.update((n) => Math.min(5, n + 1));
   }
 
   enviarEvidencia(): void {
@@ -64,6 +72,40 @@ export class MisTruequesComponent {
 
   cancelar(t: Trueque): void {
     this.truequesService.cancelar(t.id, 'Cancelado por el usuario desde la plataforma.');
+  }
+
+  // ---- Modal calificar (RF09) ----
+  readonly modalCalificarAbierto = signal(false);
+  readonly vistaModalCalificar = signal<'form' | 'exito'>('form');
+  truequeACalificar: Trueque | null = null;
+  estrellasCalificacion = 5;
+  comentarioCalificacion = '';
+
+  abrirCalificar(t: Trueque): void {
+    this.truequeACalificar = t;
+    this.estrellasCalificacion = 5;
+    this.comentarioCalificacion = '';
+    this.vistaModalCalificar.set('form');
+    this.modalCalificarAbierto.set(true);
+  }
+
+  elegirEstrellas(n: number): void {
+    this.estrellasCalificacion = n;
+  }
+
+  enviarCalificacion(): void {
+    if (!this.truequeACalificar) return;
+    this.resenasService.calificar({
+      nombreContraparte: this.truequeACalificar.contraparteNombre,
+      estrellas: this.estrellasCalificacion,
+      comentario: this.comentarioCalificacion
+    });
+    this.truequesService.calificar(this.truequeACalificar.id);
+    this.vistaModalCalificar.set('exito');
+  }
+
+  cerrarModalCalificar(): void {
+    this.modalCalificarAbierto.set(false);
   }
 
   estadoPaso(t: Trueque, indice: number): 'hecho' | 'actual' | 'pendiente' {

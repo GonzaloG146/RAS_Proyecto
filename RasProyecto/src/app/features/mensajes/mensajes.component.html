@@ -2,7 +2,13 @@
   <aside class="lista-conversaciones" [class.oculta-movil]="mostrarChatMovil()">
     <div class="lista-header">
       <h2>Mensajes</h2>
-      <input type="text" placeholder="Buscar conversación..." class="buscador" />
+      <input
+        type="text"
+        placeholder="Buscar conversación..."
+        class="buscador"
+        [ngModel]="busqueda()"
+        (ngModelChange)="busqueda.set($event)"
+      />
       <div class="tabs">
         <button type="button" [class.activo]="filtro() === 'todos'" (click)="filtro.set('todos')">Todos</button>
         <button type="button" [class.activo]="filtro() === 'noLeidos'" (click)="filtro.set('noLeidos')">No leídos</button>
@@ -29,6 +35,9 @@
           @if (c.noLeidos > 0) { <span class="badge-no-leidos">{{ c.noLeidos }}</span> }
         </button>
       }
+      @if (conversacionesFiltradas().length === 0) {
+        <div class="vacio-conversaciones text-soft">No se encontraron conversaciones.</div>
+      }
     </div>
   </aside>
 
@@ -45,7 +54,7 @@
         </div>
         <div class="chat-header-acciones">
           <button type="button" class="btn btn-outline btn-sm" (click)="modalPerfilAbierto.set(true)">Ver perfil</button>
-          <button type="button" class="btn btn-primary btn-sm">Ver intercambio</button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="verIntercambio()">Ver intercambio</button>
         </div>
       </header>
 
