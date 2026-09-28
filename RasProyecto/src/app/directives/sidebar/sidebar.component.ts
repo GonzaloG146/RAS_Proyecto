@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MensajesService } from '../../../core/services/mensajes.service';
-import { NotificacionesService } from '../../../core/services/notificaciones.service';
+import { MensajesService } from '../../servicios/services/mensajes.service';
+import { NotificacionesService } from '../../servicios/services/notificaciones.service';
 
 interface ItemMenu {
   ruta: string;

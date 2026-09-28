@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { NotificacionesService } from '../../../core/services/notificaciones.service';
+import { AuthService } from '../../servicios/services/auth.service';
+import { NotificacionesService } from '../../servicios/services/notificaciones.service';
 
 @Component({
   selector: 'app-navbar',

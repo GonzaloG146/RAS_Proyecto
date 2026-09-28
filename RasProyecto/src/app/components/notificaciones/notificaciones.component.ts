@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NotificacionesService } from '../../core/services/notificaciones.service';
-import { MensajesService } from '../../core/services/mensajes.service';
-import { Notificacion } from '../../core/models/notificacion.model';
+import { NotificacionesService } from '../../servicios/services/notificaciones.service';
+import { MensajesService } from '../../servicios/services/mensajes.service';
+import { Notificacion } from '../../servicios/models/notificacion.model';
 
 @Component({
   selector: 'app-notificaciones',
@@ -10,7 +10,7 @@ import { Notificacion } from '../../core/models/notificacion.model';
   imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './notificaciones.component.html',
-  styleUrl: './notificaciones.component.scss'
+  styleUrl: './notificaciones.component.css'
 })
 export class NotificacionesComponent {
   private readonly notificacionesService = inject(NotificacionesService);
