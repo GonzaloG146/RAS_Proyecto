@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { TruequesService } from '../../core/services/trueques.service';
-import { ResenasService } from '../../core/services/resenas.service';
-import { Trueque } from '../../core/models/trueque.model';
+import { BadgeComponent } from '../../directives/badge/badge.component';
+import { ModalComponent } from '../../directives/modal/modal.component';
+import { TruequesService } from '../../servicios/services/trueques.service';
+import { ResenasService } from '../../servicios/services/resenas.service';
+import { Trueque } from '../../servicios/models/trueque.model';
 
 type FiltroTrueque = 'todos' | 'enCurso' | 'negociando' | 'completados' | 'cancelados';
 
@@ -17,7 +17,7 @@ const PASOS = ['Propuesta enviada', 'Aceptada', 'Punto de encuentro', 'Evidencia
   imports: [FormsModule, RouterLink, BadgeComponent, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mis-trueques.component.html',
-  styleUrl: './mis-trueques.component.scss'
+  styleUrl: './mis-trueques.component.css'
 })
 export class MisTruequesComponent {
   private readonly truequesService = inject(TruequesService);

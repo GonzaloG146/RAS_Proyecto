@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { AuthService } from '../../servicios/services/auth.service';
+import { ModalComponent } from '../../directives/modal/modal.component';
 
 type Pestana = 'login' | 'registro';
 
@@ -12,7 +12,7 @@ type Pestana = 'login' | 'registro';
   imports: [FormsModule, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss'
+  styleUrl: './auth.component.css'
 })
 export class AuthComponent {
   private readonly auth = inject(AuthService);

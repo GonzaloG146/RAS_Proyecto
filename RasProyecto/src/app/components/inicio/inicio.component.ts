@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
-import { PublicacionesService } from '../../core/services/publicaciones.service';
-import { AuthService } from '../../core/services/auth.service';
+import { StatCardComponent } from '../../directives/stat-card/stat-card.component';
+import { BadgeComponent } from '../../directives/badge/badge.component';
+import { PublicacionesService } from '../../servicios/services/publicaciones.service';
+import { AuthService } from '../../servicios/services/auth.service';
 
 @Component({
   selector: 'app-inicio',
@@ -11,7 +11,7 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [RouterLink, StatCardComponent, BadgeComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './inicio.component.html',
-  styleUrl: './inicio.component.scss'
+  styleUrl: './inicio.component.css'
 })
 export class InicioComponent {
   private readonly publicacionesService = inject(PublicacionesService);

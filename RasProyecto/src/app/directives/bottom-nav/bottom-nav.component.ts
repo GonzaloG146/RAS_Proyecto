@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MensajesService } from '../../../core/services/mensajes.service';
+import { MensajesService } from '../../servicios/services/mensajes.service';
 
 @Component({
   selector: 'app-bottom-nav',

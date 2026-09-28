@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { PublicacionesService } from '../../core/services/publicaciones.service';
-import { TruequesService } from '../../core/services/trueques.service';
-import { MensajesService } from '../../core/services/mensajes.service';
-import { AuthService } from '../../core/services/auth.service';
-import { Publicacion } from '../../core/models/publicacion.model';
+import { BadgeComponent } from '../../directives/badge/badge.component';
+import { ModalComponent } from '../../directives/modal/modal.component';
+import { PublicacionesService } from '../../servicios/services/publicaciones.service';
+import { TruequesService } from '../../servicios/services/trueques.service';
+import { MensajesService } from '../../servicios/services/mensajes.service';
+import { AuthService } from '../../servicios/services/auth.service';
+import { Publicacion } from '../../servicios/models/publicacion.model';
 
 type TipoFiltro = 'todos' | 'Trueque' | 'Donación';
 
@@ -17,7 +17,7 @@ type TipoFiltro = 'todos' | 'Trueque' | 'Donación';
   imports: [FormsModule, RouterLink, BadgeComponent, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './explorar.component.html',
-  styleUrl: './explorar.component.scss'
+  styleUrl: './explorar.component.css'
 })
 export class ExplorarComponent {
   private readonly publicacionesService = inject(PublicacionesService);

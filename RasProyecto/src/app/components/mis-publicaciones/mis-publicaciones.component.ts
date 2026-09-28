@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { PublicacionesService } from '../../core/services/publicaciones.service';
-import { TruequesService } from '../../core/services/trueques.service';
-import { Publicacion, PropuestaRecibida, TipoPublicacion } from '../../core/models/publicacion.model';
+import { BadgeComponent } from '../../directives/badge/badge.component';
+import { ModalComponent } from '../../directives/modal/modal.component';
+import { PublicacionesService } from '../../servicios/services/publicaciones.service';
+import { TruequesService } from '../../servicios/services/trueques.service';
+import { Publicacion, PropuestaRecibida, TipoPublicacion } from '../../servicios/models/publicacion.model';
 
 type FiltroPub = 'todas' | 'activas' | 'conPropuestas' | 'pausadas' | 'cerradas';
 
@@ -15,7 +15,7 @@ type FiltroPub = 'todas' | 'activas' | 'conPropuestas' | 'pausadas' | 'cerradas'
   imports: [FormsModule, RouterLink, BadgeComponent, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mis-publicaciones.component.html',
-  styleUrl: './mis-publicaciones.component.scss'
+  styleUrl: './mis-publicaciones.component.css'
 })
 export class MisPublicacionesComponent implements OnInit {
   private readonly publicacionesService = inject(PublicacionesService);

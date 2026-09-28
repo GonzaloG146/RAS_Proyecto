@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { AuthService } from '../../core/services/auth.service';
-import { ResenasService } from '../../core/services/resenas.service';
+import { ModalComponent } from '../../directives/modal/modal.component';
+import { AuthService } from '../../servicios/services/auth.service';
+import { ResenasService } from '../../servicios/services/resenas.service';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -11,7 +11,7 @@ import { ResenasService } from '../../core/services/resenas.service';
   imports: [FormsModule, RouterLink, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mi-perfil.component.html',
-  styleUrl: './mi-perfil.component.scss'
+  styleUrl: './mi-perfil.component.css'
 })
 export class MiPerfilComponent {
   private readonly auth = inject(AuthService);

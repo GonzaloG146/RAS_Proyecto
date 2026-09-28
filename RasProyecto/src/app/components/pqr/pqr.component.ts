@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { PqrService } from '../../core/services/pqr.service';
-import { Pqr, TipoPqr } from '../../core/models/pqr.model';
+import { BadgeComponent } from '../../directives/badge/badge.component';
+import { ModalComponent } from '../../directives/modal/modal.component';
+import { PqrService } from '../../servicios/services/pqr.service';
+import { Pqr, TipoPqr } from '../../servicios/models/pqr.model';
 
 type Pestana = 'nueva' | 'mis';
 
@@ -14,7 +14,7 @@ type Pestana = 'nueva' | 'mis';
   imports: [FormsModule, RouterLink, BadgeComponent, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './pqr.component.html',
-  styleUrl: './pqr.component.scss'
+  styleUrl: './pqr.component.css'
 })
 export class PqrComponent {
   private readonly pqrService = inject(PqrService);

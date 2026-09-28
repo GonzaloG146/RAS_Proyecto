@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { MensajesService } from '../../core/services/mensajes.service';
+import { ModalComponent } from '../../directives/modal/modal.component';
+import { MensajesService } from '../../servicios/services/mensajes.service';
 
 type FiltroConv = 'todos' | 'noLeidos';
 
@@ -12,7 +12,7 @@ type FiltroConv = 'todos' | 'noLeidos';
   imports: [FormsModule, RouterLink, ModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mensajes.component.html',
-  styleUrl: './mensajes.component.scss'
+  styleUrl: './mensajes.component.css'
 })
 export class MensajesComponent {
   private readonly mensajesService = inject(MensajesService);

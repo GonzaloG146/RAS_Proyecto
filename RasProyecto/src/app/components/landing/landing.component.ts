@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { BadgeComponent } from '../../shared/components/badge/badge.component';
-import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
-import { PublicacionesService } from '../../core/services/publicaciones.service';
+import { BadgeComponent } from '../../directives/badge/badge.component';
+import { StatCardComponent } from '../../directives/stat-card/stat-card.component';
+import { PublicacionesService } from '../../servicios/services/publicaciones.service';
 
 @Component({
   selector: 'app-landing',
@@ -10,7 +10,7 @@ import { PublicacionesService } from '../../core/services/publicaciones.service'
   imports: [RouterLink, BadgeComponent, StatCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './landing.component.html',
-  styleUrl: './landing.component.scss'
+  styleUrl: './landing.component.css'
 })
 export class LandingComponent {
   private readonly publicacionesService = inject(PublicacionesService);
